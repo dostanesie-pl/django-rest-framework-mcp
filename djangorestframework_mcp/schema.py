@@ -531,7 +531,7 @@ def field_to_json_schema(field: Field) -> Dict[str, Any]:
     return schema
 
 
-def generate_body_schema(tool: MCPTool) -> Dict[str, Any]:
+def generate_body_schema(tool: MCPTool, request=None) -> Dict[str, Any]:
     """
     Generate the body schema for a ViewSet action.
 
@@ -557,7 +557,7 @@ def generate_body_schema(tool: MCPTool) -> Dict[str, Any]:
         if tool.action in ["list", "retrieve", "destroy"]:
             return {"schema": None, "is_required": False}
 
-        instance = tool.viewset_class()
+        instance = tool.viewset_class(request=request)
         instance.action = tool.action
         serializer_class = instance.get_serializer_class()
 
@@ -640,7 +640,7 @@ def generate_kwargs_schema(tool: MCPTool) -> Dict[str, Any]:
     return {"schema": None, "is_required": False}
 
 
-def generate_tool_schema(tool: MCPTool) -> Dict[str, Any]:
+def generate_tool_schema(tool: MCPTool, request=None) -> Dict[str, Any]:
     """
     Generate MCP tool schema for a ViewSet action using kwargs+body structure.
 
@@ -655,7 +655,7 @@ def generate_tool_schema(tool: MCPTool) -> Dict[str, Any]:
     """
     # Generate the component schemas
     kwargs_info = generate_kwargs_schema(tool)
-    body_info = generate_body_schema(tool)
+    body_info = generate_body_schema(tool, request)
 
     # Stitch together the top-level inputSchema
     properties = {}

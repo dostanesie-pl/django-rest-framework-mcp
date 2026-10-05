@@ -69,7 +69,7 @@ class TestMCPView(unittest.TestCase):
 
         # Verify calls
         mock_registry.get_all_tools.assert_called_once()
-        mock_generate_schema.assert_called_once_with(mock_tool)
+        mock_generate_schema.assert_called_once_with(mock_tool, None)
 
     @patch("djangorestframework_mcp.views.registry")
     def test_handle_tools_call_success(self, mock_registry):
