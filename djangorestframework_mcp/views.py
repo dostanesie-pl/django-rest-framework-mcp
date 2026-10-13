@@ -62,7 +62,7 @@ class MCPView(View):
                 # No response is expected
                 return HttpResponse(status=HTTPStatus.NO_CONTENT)
             elif method == "tools/list":
-                result = self.handle_tools_list()
+                result = self.handle_tools_list(request)
             elif method == "tools/call":
                 result = self.handle_tools_call(params, request)
             else:
@@ -100,12 +100,12 @@ class MCPView(View):
             "serverInfo": {"name": "django-rest-framework-mcp", "version": "0.1.0a2"},
         }
 
-    def handle_tools_list(self) -> Dict[str, Any]:
+    def handle_tools_list(self, request=None) -> Dict[str, Any]:
         """Handle tools/list request."""
         tools = []
 
         for tool in registry.get_all_tools():
-            tool_schema = generate_tool_schema(tool)
+            tool_schema = generate_tool_schema(tool, request)
 
             tool_dict = {
                 "name": tool.name,
